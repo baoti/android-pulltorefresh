@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 
 import com.markupartist.android.widget.pulltorefresh.R;
 
@@ -177,8 +177,9 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
                         mRefreshState = REFRESHING;
                         prepareForRefresh();
                         onRefresh();
-                    } else if (mRefreshView.getBottom() < mRefreshViewHeight
-                            || mRefreshView.getTop() <= 0) {
+                    } else if ((mRefreshView.getBottom() < mRefreshViewHeight
+                            || mRefreshView.getTop() <= 0)
+                            && mRefreshState != TAP_TO_REFRESH) {
                         // Abort refresh and scroll down below the refresh view
                         resetHeader();
                         setSelection(1);
@@ -364,7 +365,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
     /**
      * Resets the list to a normal state after a refresh.
      */
-    public void onRefreshComplete() {        
+    public void onRefreshComplete() {
         Log.d(TAG, "onRefreshComplete");
 
         resetHeader();
